@@ -1,8 +1,24 @@
 <template>
-  <div class="encounter">
-    <div class="encounter__params">
+  <div class="encounter" :style="`background-image:url(${meta_background})`">
+    <form class="encounter__params" @submit.prevent="saveMeta">
+      <VueFormField title="Label">
+        <VueInput v-model="meta_label"/>
+      </VueFormField>
+      <VueFormField title="Title">
+        <VueInput v-model="meta_title"/>
+      </VueFormField>
+      <VueFormField title="Background">
+        <VueSelect v-model="meta_background">
+          <VueSelectButton :value="bg.value" :label="bg.label" v-for="bg in backgroundChoices" :key="bg.value"/>
+        </VueSelect>
+      </VueFormField>
+      <VueFormField title="Display in viewer">
+        <VueSwitch :icon="meta_display ? 'cast_connected' : 'cast'" v-model="meta_display"/>
+      </VueFormField>
+      <VueButton type="submit" class="" icon-left="check" style="margin-top:25px; margin-left: auto">Save</VueButton>
+      <VueButton class="icon-button flat danger" @click="deleteEncounter" icon-left="delete" style="margin-top:25px; margin-left: 20px;"/>
       <!-- todo: Viewer parameters -->
-    </div>
+    </form>
     <div class="encounter__chars">
       <div class="encounter__row legend">
         <div class="legend__title">Characters</div>
@@ -47,7 +63,18 @@ import nanoid from 'nanoid';
 
 export default Vue.extend({
   props: ['asset'],
+  data() {
+    return {
+      meta_label: this.asset.label,
+      meta_title: this.asset.title,
+      meta_background: this.asset.background,
+      meta_display: this.asset.display
+    };
+  },
   computed: {
+    backgroundChoices() {
+      return this.$store.state.assets.filter(r => r.type === 'env').map(r => ({label:r.label, value:r.picture}));
+    },
     availableNewCharacters() {
       let map = { pc:[], npc:[], mob:[] };
       this.$store.state.assets.forEach(a => {
@@ -92,6 +119,17 @@ export default Vue.extend({
     },
     removeCharacter(char) {
       this.$emit('input', {characters:this.asset.characters.filter(r => r.uid !== char.uid)});
+    },
+    deleteEncounter() {
+      this.$emit('delete');
+    },
+    saveMeta() {
+      this.$emit('input', {
+        label: this.meta_label,
+        title: this.meta_title,
+        display: this.meta_display,
+        background: this.meta_background
+      });
     }
   },
   components: {
@@ -101,7 +139,6 @@ export default Vue.extend({
 </script>
 <style scoped>
 .encounter {
-  background-image: url("../assets/images/environment-cavern.jpg");
   background-size: cover;
 }
 .encounter__row {
@@ -117,6 +154,11 @@ export default Vue.extend({
   margin: 50px 50px 10px 50px;
   background: #111;
   padding: 15px;
+  display: flex;
+  justify-content: stretch;
+}
+.encounter__params .vue-ui-form-field {
+  margin-right: 30px;
 }
 
 .encounter__chars {

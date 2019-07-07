@@ -1,6 +1,6 @@
 <template>
   <div class="viewer" @click="refresh" :data-type="asset && asset.type || 'empty'">
-    <div v-if="asset === null">Empty</div>
+    <div v-if="asset === null" class="viewer__splash"/>
     <div v-else-if="asset.type === 'env'" class="viewer__background" :style="`background-image:url(${asset.picture})`"/>
     <div v-else-if="asset.type === 'encounter'" class="viewer__background encounter" :style="`background-image:url(${asset.background})`">
       <div class="encounter__chars">
@@ -98,6 +98,12 @@ export default Vue.extend({
   position: fixed;
   top: 0;
   left: 0;
+}
+.viewer__splash {
+  width: 100%;
+  height: 100%;
+  background: url(../assets/logo.png) no-repeat center;
+  background-size: contain;
 }
 .viewer__background {
   position: absolute;

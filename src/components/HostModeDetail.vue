@@ -5,7 +5,10 @@
         {{ asset.label }}
         <VueIcon icon="close" class="modal__close" @click="close"/>
       </div>
-      <EncounterHost class="modal__body" v-if="asset.type === 'encounter'" :asset="asset" @input="$emit('input', $event)"/>
+      <EncounterHost class="modal__body" v-if="asset.type === 'encounter'" :asset="asset"
+      @input="$emit('input', $event)"
+      @delete="$emit('delete')"
+      />
       <div class="modal__body" v-else>
         {{ JSON.stringify(asset) }}
       </div>
