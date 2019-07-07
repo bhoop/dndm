@@ -18,9 +18,7 @@ export default new Router({
         import(/* webpackChunkName: "host" */ "./views/HostMode.vue"),
       children: [
         {
-          path: "asset/:asset",
-          component: () =>
-            import(/* webpackChunkName: "host" */ "./views/HostModeDetail.vue")
+          path: "asset/:asset"
         }
       ]
     },

@@ -2,10 +2,13 @@
   <div class="modal">
     <div class="modal__win">
       <div class="modal__head">
-        Encounter: 16 - Oranges
+        {{ asset.label }}
         <VueIcon icon="close" class="modal__close" @click="close"/>
       </div>
-      <EncounterHost class="modal__body"/>
+      <EncounterHost class="modal__body" v-if="asset.type === 'encounter'" :asset="asset" @input="$emit('input', $event)"/>
+      <div class="modal__body" v-else>
+        {{ JSON.stringify(asset) }}
+      </div>
     </div>
   </div>
 </template>
@@ -13,6 +16,7 @@
 import Vue from "vue";
 import EncounterHost from "../components/EncounterHost";
 export default Vue.extend({
+  props: ['asset'],
   methods: {
     close() {
       this.$router.replace(`/host/${this.$route.params.table}`)
