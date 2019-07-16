@@ -27,6 +27,12 @@ export default new Router({
       name: "view",
       component: () =>
         import(/* webpackChunkName: "view" */ "./views/ViewMode.vue")
+    },
+    {
+      path: "/character",
+      name: "character",
+      component: () =>
+        import(/* webpackChunkName: "player" */ "./views/CharacterSheet.vue")
     }
   ]
 });
